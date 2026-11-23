@@ -30,6 +30,18 @@ Web + worker run in one Docker container (`start.sh`); Postgres/pgvector on Neon
 3. **Render** - New > Blueprint > pick the repo. It reads `render.yaml` and creates the web service and the Key Value instance. When asked, fill in `DATABASE_URL`, `COHERE_API_KEY`, `GROQ_API_KEY` and `DEMO_PASSWORD`.
 4. Open the service URL, log in as `demo` with your password, upload `samples/messy_contract.pdf` once (it is stored in Neon and survives restarts).
 
+## Live demo
+
+https://clausecheck-r6kv.onrender.com
+
+Login:
+
+username `demo` password:`smasif`
+
+Note: this runs on free tiers, so the first load can take about a minute
+while the server wakes up.
+
+
 `schema.sql` is applied automatically at startup. `/healthz` is the health check (it does not touch the database, so Neon can sleep).
 Demo protection (env vars, off locally): `DEMO_PASSWORD` (login), `MAX_DOCUMENTS`, `ASK_LIMIT` (questions per IP per 10 min).
 Free-tier behaviour: the service sleeps after 15 min idle and takes about a minute to wake; Neon sleeps after 5 min idle; the queue is in memory only.
