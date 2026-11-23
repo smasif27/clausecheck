@@ -15,7 +15,7 @@ services:
       - key: DEMO_PASSWORD       # login password for visitors (user: demo)
         sync: false
       - key: GROQ_MODEL
-        value: llama-3.3-70b-versatile
+        value: openai/gpt-oss-120b
       - key: MAX_DOCUMENTS
         value: "10"
       - key: ASK_LIMIT
