@@ -1,0 +1,375 @@
+{
+  "document": "messy_contract.pdf",
+  "questions": [
+    {
+      "id": "q01",
+      "question": "What is the duration of the agreement?",
+      "type": "single",
+      "key_facts": [
+        "one year|1 year|12 months"
+      ],
+      "evidence": [
+        "continues for one year"
+      ]
+    },
+    {
+      "id": "q02",
+      "question": "What is the termination notice period?",
+      "type": "single",
+      "key_facts": [
+        "thirty|30"
+      ],
+      "evidence": [
+        "thirty days' prior written notice"
+      ]
+    },
+    {
+      "id": "q03",
+      "question": "What happens if either party materially breaches the agreement?",
+      "type": "single",
+      "key_facts": [
+        "fifteen|15",
+        "cure"
+      ],
+      "evidence": [
+        "fails to cure the breach within fifteen days"
+      ]
+    },
+    {
+      "id": "q04",
+      "question": "What are the confidentiality obligations of both parties?",
+      "type": "single",
+      "key_facts": [
+        "reasonable care",
+        "three years|3 years"
+      ],
+      "evidence": [
+        "using at least reasonable care",
+        "survive termination for three years"
+      ]
+    },
+    {
+      "id": "q05",
+      "question": "Who owns the intellectual property created under this agreement?",
+      "type": "single",
+      "key_facts": [
+        "full payment",
+        "company"
+      ],
+      "evidence": [
+        "upon full payment"
+      ]
+    },
+    {
+      "id": "q06",
+      "question": "What security responsibilities does the Service Provider have?",
+      "type": "single",
+      "key_facts": [
+        "without undue delay",
+        "confirmed security incident"
+      ],
+      "evidence": [
+        "confirmed security incident affecting company data"
+      ]
+    },
+    {
+      "id": "q07",
+      "question": "What is the payment deadline for invoices?",
+      "type": "single",
+      "key_facts": [
+        "thirty|30"
+      ],
+      "evidence": [
+        "payable within thirty days after receipt"
+      ]
+    },
+    {
+      "id": "q08",
+      "question": "What is the maximum liability of each party?",
+      "type": "single",
+      "key_facts": [
+        "twelve months|12 months",
+        "fees paid"
+      ],
+      "evidence": [
+        "fees paid in the twelve months preceding the claim"
+      ],
+      "must_not": [
+        "by that party"
+      ]
+    },
+    {
+      "id": "q09",
+      "question": "Which country's laws govern the agreement, and where will disputes be resolved?",
+      "type": "single",
+      "key_facts": [
+        "india",
+        "bengaluru"
+      ],
+      "evidence": [
+        "governed by the laws of india",
+        "courts located in bengaluru"
+      ]
+    },
+    {
+      "id": "q10",
+      "question": "What are the working hours and support days specified in Schedule A?",
+      "type": "single",
+      "key_facts": [
+        "monday",
+        "friday",
+        "9:00",
+        "6:00"
+      ],
+      "evidence": [
+        "monday through friday, 9:00 am to 6:00 pm ist"
+      ]
+    },
+    {
+      "id": "q11",
+      "question": "What is the hourly rate for a Senior AI Engineer?",
+      "type": "table",
+      "key_facts": [
+        "3,500|3500"
+      ],
+      "evidence": [
+        "senior ai engineer 3,500"
+      ]
+    },
+    {
+      "id": "q12",
+      "question": "What is the minimum monthly commitment for a Backend Engineer?",
+      "type": "table",
+      "key_facts": [
+        "40"
+      ],
+      "evidence": [
+        "backend engineer 2,800 40 hrs/month"
+      ]
+    },
+    {
+      "id": "q13",
+      "question": "Which role is billed per engagement instead of monthly?",
+      "type": "table",
+      "key_facts": [
+        "devops"
+      ],
+      "evidence": [
+        "devops consultant 3,800 on-demand per engagement"
+      ]
+    },
+    {
+      "id": "q14",
+      "question": "Who are the parties to the agreement?",
+      "type": "single",
+      "key_facts": [
+        "northstar",
+        "acme"
+      ],
+      "evidence": [
+        "acme digital solutions pvt. ltd. (\"service provider\")"
+      ]
+    },
+    {
+      "id": "q15",
+      "question": "What does the term 'Services' mean in this agreement?",
+      "type": "single",
+      "key_facts": [
+        "software development",
+        "maintenance",
+        "consulting",
+        "technical support"
+      ],
+      "evidence": [
+        "software development, maintenance, consulting, and technical support"
+      ]
+    },
+    {
+      "id": "q16",
+      "question": "How must notices be delivered?",
+      "type": "single",
+      "key_facts": [
+        "hand",
+        "courier",
+        "email"
+      ],
+      "evidence": [
+        "delivered by hand, recognized courier, or email"
+      ]
+    },
+    {
+      "id": "q17",
+      "question": "When is a notice deemed received?",
+      "type": "single",
+      "key_facts": [
+        "delivery is confirmed"
+      ],
+      "evidence": [
+        "deemed received when delivery is confirmed"
+      ]
+    },
+    {
+      "id": "q18",
+      "question": "What must an amendment to the agreement satisfy?",
+      "type": "single",
+      "key_facts": [
+        "writing|written",
+        "signed"
+      ],
+      "evidence": [
+        "any amendment must be in writing and signed"
+      ]
+    },
+    {
+      "id": "q19",
+      "question": "What does the Service Provider indemnify the Company against?",
+      "type": "single",
+      "key_facts": [
+        "third-party|third party",
+        "intellectual property"
+      ],
+      "evidence": [
+        "indemnify the company against third-party claims"
+      ]
+    },
+    {
+      "id": "q20",
+      "question": "What does the Service Provider warrant about the Services?",
+      "type": "single",
+      "key_facts": [
+        "conform",
+        "due care"
+      ],
+      "evidence": [
+        "materially conform to the requirements"
+      ]
+    },
+    {
+      "id": "q21",
+      "question": "Is either party liable for indirect or consequential damages?",
+      "type": "single",
+      "key_facts": [
+        "neither|not"
+      ],
+      "evidence": [
+        "neither party shall be liable for indirect, incidental, or consequential damages"
+      ]
+    },
+    {
+      "id": "q22",
+      "question": "How long do the confidentiality obligations last, and what is the cure period for a material breach?",
+      "type": "multi",
+      "key_facts": [
+        "three years|3 years",
+        "fifteen|15"
+      ],
+      "evidence": [
+        "survive termination for three years",
+        "fails to cure the breach within fifteen days"
+      ]
+    },
+    {
+      "id": "q23",
+      "question": "And what if one party materially breaches instead?",
+      "type": "follow_up",
+      "follow_up_of": "q02",
+      "key_facts": [
+        "fifteen|15"
+      ],
+      "evidence": [
+        "fails to cure the breach within fifteen days"
+      ]
+    },
+    {
+      "id": "q24",
+      "question": "Does that apply to the Service Provider's own tools too?",
+      "type": "follow_up",
+      "follow_up_of": "q05",
+      "key_facts": [
+        "excluding|excluded|retain|not"
+      ],
+      "evidence": [
+        "excluding the service provider's pre-existing tools"
+      ]
+    },
+    {
+      "id": "q25",
+      "question": "How long do those obligations last after the contract ends?",
+      "type": "follow_up",
+      "follow_up_of": "q04",
+      "key_facts": [
+        "three years|3 years"
+      ],
+      "evidence": [
+        "survive termination for three years"
+      ]
+    },
+    {
+      "id": "q26",
+      "question": "Which courts exactly?",
+      "type": "follow_up",
+      "follow_up_of": "q09",
+      "key_facts": [
+        "bengaluru"
+      ],
+      "evidence": [
+        "courts located in bengaluru"
+      ]
+    },
+    {
+      "id": "q27",
+      "question": "What is the late payment interest rate?",
+      "type": "partial",
+      "key_facts": [
+        "applicable law"
+      ],
+      "evidence": [
+        "interest at the rate permitted by applicable law"
+      ],
+      "must_not": [
+        "%",
+        "percent"
+      ]
+    },
+    {
+      "id": "q28",
+      "question": "What is the Effective Date of the agreement?",
+      "type": "unanswerable",
+      "key_facts": [],
+      "evidence": [],
+      "must_refuse": true
+    },
+    {
+      "id": "q29",
+      "question": "Who is the CEO of Northstar Technologies?",
+      "type": "unanswerable",
+      "key_facts": [],
+      "evidence": [],
+      "must_refuse": true
+    },
+    {
+      "id": "q30",
+      "question": "Does the agreement include a non-compete clause?",
+      "type": "unanswerable",
+      "key_facts": [],
+      "evidence": [],
+      "must_refuse": true
+    },
+    {
+      "id": "q31",
+      "question": "What is the penalty for early termination?",
+      "type": "unanswerable",
+      "key_facts": [],
+      "evidence": [],
+      "must_refuse": true
+    },
+    {
+      "id": "q32",
+      "question": "Who signed the agreement?",
+      "type": "unanswerable",
+      "key_facts": [],
+      "evidence": [],
+      "must_refuse": true
+    }
+  ]
+}

@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ClauseCheck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E8EDF2; --panel:#FFFFFF; --ink:#16243A; --muted:#5B6B80;
+  --line:#CBD5E1; --blue:#2F4E78; --mark:#F2CF4A; --err:#A32D2D;
+  --sans:'Instrument Sans',system-ui,sans-serif; --serif:'Spectral',Georgia,serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);display:flex;flex-direction:column}
+button,select,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+header{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding:14px 20px;background:var(--ink);color:#fff}
+header h1{font:600 20px var(--serif);margin:0 auto 0 0}
+header label{display:flex;align-items:center;gap:8px;font-size:13px;color:#C9D4E3}
+header select{background:#22344F;border:1px solid #3B5070;color:#fff;border-radius:4px;padding:5px 8px}
+header input[type=range]{width:110px;accent-color:var(--mark)}
+.upload{cursor:pointer;border:1px solid #3B5070;border-radius:4px;padding:5px 12px;color:#fff;font-weight:500}
+.upload:hover{background:#22344F}
+.chip{font-size:12.5px;padding:3px 10px;border-radius:999px;background:#22344F;color:#C9D4E3}
+.chip[hidden]{display:none}
+.chip.ok{background:#1F5F3F;color:#fff}
+.chip.err{background:#7A2323;color:#fff}
+#clear{background:none;border:1px solid #3B5070;color:#fff;border-radius:4px;padding:5px 12px;cursor:pointer}
+#clear:hover{background:#22344F}
+
+main{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;padding:16px 20px}
+.pane{background:var(--panel);border:1px solid var(--line);border-radius:6px;display:flex;flex-direction:column;min-height:0}
+.pane-title{padding:12px 16px;border-bottom:1px solid var(--line);font-weight:600}
+.pane-title small{font-weight:400;color:var(--muted);margin-left:8px}
+
+#log,#evidence{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+.empty{color:var(--muted);margin:auto;text-align:center;max-width:34ch}
+
+.q{align-self:flex-end;max-width:85%;background:var(--blue);color:#fff;padding:9px 13px;border-radius:12px 12px 2px 12px}
+.a{align-self:flex-start;max-width:92%;border:1px solid var(--line);border-radius:12px 12px 12px 2px;padding:11px 14px;font-family:var(--serif);font-size:16.5px;line-height:1.55;white-space:pre-wrap;cursor:pointer;background:#fff}
+.a.active{border-color:var(--blue);box-shadow:0 0 0 2px #2F4E7833}
+.a .meta{display:block;font:12.5px var(--sans);color:var(--muted);margin-top:8px;white-space:normal}
+.a.error{border-color:var(--err);color:var(--err);font-family:var(--sans);font-size:14px}
+.typing{color:var(--muted);font-style:italic}
+
+form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}
+textarea{flex:1;resize:none;border:1px solid var(--line);border-radius:6px;padding:9px 11px;height:44px}
+#send{background:var(--blue);color:#fff;border:0;border-radius:6px;padding:0 20px;font-weight:600;cursor:pointer}
+#send:disabled{opacity:.5;cursor:default}
+
+.clause{border-left:4px solid var(--mark);background:#FBFAF3;padding:10px 14px;border-radius:0 4px 4px 0}
+.clause header{all:unset;display:flex;justify-content:space-between;gap:10px;font-size:12.5px;color:var(--muted);margin-bottom:6px}
+.clause p{margin:0;font-family:var(--serif);font-size:15px;line-height:1.55;white-space:pre-wrap}
+
+@media (max-width:820px){
+  main{grid-template-columns:1fr;grid-template-rows:minmax(0,1.3fr) minmax(0,1fr);padding:10px}
+  header{padding:12px}
+}
+@media (prefers-reduced-motion:no-preference){ .a{transition:box-shadow .15s,border-color .15s} }
+</style>
+</head>
+<body>
+<header>
+  <h1>ClauseCheck</h1>
+  <label>Contract <select id="doc"></select></label>
+  <label>Variety <input id="lambda" type="range" min="0" max="1" step="0.05" value="0.7" aria-label="MMR lambda"><output id="lambdaOut">0.70</output></label>
+  <label class="upload" title="Upload a contract PDF (max 20 MB)">+ Upload PDF<input id="file" type="file" accept="application/pdf" hidden></label><span id="upStatus" class="chip" hidden></span>
+  <button id="clear" type="button">New conversation</button>
+</header>
+
+<main>
+  <section class="pane" aria-label="Conversation">
+    <div class="pane-title">Conversation</div>
+    <div id="log" aria-live="polite">
+      <p class="empty" id="emptyLog">Ask about parties, obligations, deadlines, or termination in the selected contract.</p>
+    </div>
+    <form id="form">
+      <textarea id="q" placeholder="Who must give notice before termination?" aria-label="Your question"></textarea>
+      <button id="send" type="submit">Ask</button>
+    </form>
+  </section>
+
+  <section class="pane" aria-label="Clauses used">
+    <div class="pane-title">Clauses used<small id="evNote"></small></div>
+    <div id="evidence"><p class="empty">Select an answer to see the contract clauses it was based on.</p></div>
+  </section>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const log = $('log'), evidence = $('evidence'), qBox = $('q'), sendBtn = $('send');
+let history = [];          // [{question, answer}] sent to the backend (last 3)
+let busy = false;
+
+function add(cls, text){
+  $('emptyLog')?.remove();
+  const el = document.createElement('div');
+  el.className = cls; el.textContent = text;
+  log.appendChild(el); log.scrollTop = log.scrollHeight;
+  return el;
+}
+
+function label(s){
+  const h = s.text.trim().split('\n')[0];
+  const name = h.length <= 60 ? h : 'Chunk ' + s.chunk_index;
+  return s.page ? `${name} (p.${s.page})` : name;
+}
+
+function showEvidence(data, el){
+  document.querySelectorAll('.a.active').forEach(x => x.classList.remove('active'));
+  el.classList.add('active');
+  evidence.replaceChildren();
+  $('evNote').textContent = ` ${data.sources.length} retrieved`;
+  if(!data.sources.length){
+    evidence.innerHTML = '<p class="empty">No clauses were retrieved for this question.</p>'; return;
+  }
+  data.sources.forEach(s => {
+    const c = document.createElement('div'); c.className = 'clause';
+    const h = document.createElement('header');
+    const l = document.createElement('span'); l.textContent = label(s);
+    const r = document.createElement('span');
+    r.textContent = s.vector_rank && s.keyword_rank ? 'Semantic + keyword' : s.vector_rank ? 'Semantic match' : 'Keyword match';
+    r.title = `vector #${s.vector_rank ?? '-'}, keyword #${s.keyword_rank ?? '-'} | RRF ${s.rrf_score} | MMR ${s.mmr_score}`;
+    h.append(l, r);
+    const p = document.createElement('p'); const t = s.text.trim(), nl = t.indexOf('\n'); p.textContent = (nl > 0 && nl <= 60) ? t.slice(nl + 1).trim() : t;
+    c.append(h, p); evidence.appendChild(c);
+  });
+}
+
+async function loadDocs(selectId){
+  try{
+    const res = await fetch('/api/documents');
+    if(!res.ok) throw new Error((await res.json()).detail || res.statusText);
+    const docs = await res.json(), sel = $('doc');
+    sel.replaceChildren();
+    if(!docs.length){ sel.innerHTML = '<option value="">No documents yet - upload a PDF</option>'; return; }
+    docs.forEach(d => {
+      const o = document.createElement('option');
+      o.value = d.document_id; o.disabled = d.status !== 'completed';
+      o.textContent = `${d.filename} (${d.status === 'completed' ? d.chunks + ' clauses' : d.status})`;
+      sel.appendChild(o);
+    });
+    const ready = docs.find(d => d.document_id === selectId && d.status === 'completed') || docs.find(d => d.status === 'completed');
+    if(ready) sel.value = ready.document_id;
+  }catch(e){
+    add('a error', 'Could not load documents: ' + e.message);
+  }
+}
+
+let chipTimer;
+function setStatus(text, cls = '', hideAfter = 0){
+  const st = $('upStatus'); clearTimeout(chipTimer);
+  st.hidden = !text; st.textContent = text; st.className = 'chip ' + cls;
+  if(hideAfter) chipTimer = setTimeout(() => { st.hidden = true; }, hideAfter);
+}
+
+async function upload(e){
+  const f = e.target.files[0]; if(!f) return;
+  e.target.value = '';
+  if(!/\.pdf$/i.test(f.name)) return setStatus('Please choose a PDF file', 'err', 6000);
+  if(f.size > 20 * 1024 * 1024) return setStatus('File is larger than 20 MB', 'err', 6000);
+  setStatus('Uploading ' + f.name + '\u2026');
+  const fd = new FormData(); fd.append('file', f);
+  try{
+    const res = await fetch('/api/documents', {method:'POST', body: fd});
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.detail || res.statusText);
+    setStatus('Processing ' + f.name + '\u2026');
+    let ready = false;
+    for(let i = 0; i < 120 && !ready; i++){
+      await new Promise(r => setTimeout(r, 2000));
+      const s = await (await fetch('/api/documents/' + data.document_id)).json();
+      if(s.status === 'failed') throw new Error(s.error_message || 'Processing failed');
+      ready = s.status === 'completed';
+    }
+    if(!ready) throw new Error('Processing is taking too long - check the worker');
+    await loadDocs(data.document_id); resetChat();
+    setStatus(f.name + ' is ready', 'ok', 6000);
+  }catch(err){ setStatus('Failed: ' + err.message, 'err', 10000); }
+}
+$('file').addEventListener('change', upload);
+
+async function ask(e){
+  e.preventDefault();
+  const question = qBox.value.trim();
+  const document_id = $('doc').value;
+  if(!question || busy) return;
+  if(!document_id){ add('a error', 'Choose a contract first.'); return; }
+
+  busy = true; sendBtn.disabled = true; qBox.value = '';
+  add('q', question);
+  const pending = add('a typing', 'Searching the contract...');
+
+  try{
+    const res = await fetch('/api/ask', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        question, document_id, history,
+        lambda_param: parseFloat($('lambda').value)
+      })
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.detail || res.statusText);
+
+    pending.className = 'a'; pending.textContent = '';
+    data.answer.split(/\*\*(.+?)\*\*/g).forEach((part, i) => {
+      if(i % 2){ const b = document.createElement('strong'); b.textContent = part; pending.appendChild(b); }
+      else pending.appendChild(document.createTextNode(part));
+    });
+    if(data.standalone_question && data.standalone_question !== question){
+      const m = document.createElement('span'); m.className = 'meta';
+      m.textContent = 'Searched as: ' + data.standalone_question;
+      pending.appendChild(m);
+    }
+    if(data.sources.length){
+      const m = document.createElement('span'); m.className = 'meta';
+      m.textContent = 'Top matches: ' + data.sources.slice(0, 2).map(label).join(' \u00b7 ');
+      pending.appendChild(m);
+    }
+    pending.addEventListener('click', () => showEvidence(data, pending));
+    showEvidence(data, pending);
+
+    history.push({question, answer: data.answer});
+    history = history.slice(-3);
+  }catch(err){
+    pending.className = 'a error';
+    pending.textContent = 'Something went wrong: ' + err.message;
+  }finally{
+    busy = false; sendBtn.disabled = false; qBox.focus();
+    log.scrollTop = log.scrollHeight;
+  }
+}
+
+$('form').addEventListener('submit', ask);
+qBox.addEventListener('keydown', e => {
+  if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); $('form').requestSubmit(); }
+});
+$('lambda').addEventListener('input', e => $('lambdaOut').textContent = (+e.target.value).toFixed(2));
+$('doc').addEventListener('change', resetChat);
+$('clear').addEventListener('click', resetChat);
+
+function resetChat(){
+  history = [];
+  log.innerHTML = '<p class="empty" id="emptyLog">Ask about parties, obligations, deadlines, or termination in the selected contract.</p>';
+  evidence.innerHTML = '<p class="empty">Select an answer to see the contract clauses it was based on.</p>';
+  $('evNote').textContent = '';
+}
+
+loadDocs();
+</script>
+</body>
+</html>

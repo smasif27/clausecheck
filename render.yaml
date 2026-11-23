@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: clausecheck
+    runtime: docker
+    plan: free
+    region: singapore
+    healthCheckPath: /healthz
+    envVars:
+      - key: DATABASE_URL        # Neon connection string (pooled)
+        sync: false
+      - key: COHERE_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: DEMO_PASSWORD       # login password for visitors (user: demo)
+        sync: false
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
+      - key: MAX_DOCUMENTS
+        value: "10"
+      - key: ASK_LIMIT
+        value: "30"
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: clausecheck-queue
+          property: connectionString
+  - type: keyvalue
+    name: clausecheck-queue
+    plan: free
+    region: singapore
+    ipAllowList: []
+    maxmemoryPolicy: noeviction
